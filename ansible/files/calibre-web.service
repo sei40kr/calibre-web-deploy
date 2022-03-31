@@ -1,0 +1,15 @@
+[Unit]
+Description=Calibre Content Server
+After=network.target
+
+[Service]
+Environment=CALIBRE_DBPATH=/var/lib/calibre-web
+ExecStart=/opt/calibre-web/venv/bin/python3 /opt/calibre-web/cps.py
+Restart=on-failure
+User=calibre-web
+Group=calibre-web
+StateDirectory=calibre-web
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

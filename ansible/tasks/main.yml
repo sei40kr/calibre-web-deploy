@@ -1,0 +1,99 @@
+---
+- name: Add the group calibre-web
+  become: yes
+  group:
+    name: calibre-web
+
+- name: Add the user calibre-web
+  become: yes
+  user:
+    group: calibre-web
+    name: calibre-web
+    system: yes
+
+- name: Install calibre-web dependencies
+  become: yes
+  apt:
+    name:
+      - calibre
+      - python3-pip
+      - python3-venv
+    update_cache: yes
+
+- name: Checkout calibre-web repo
+  become: yes
+  git:
+    depth: 1
+    dest: /opt/calibre-web
+    repo: https://github.com/janeczku/calibre-web.git
+    version: HEAD
+
+- name: Install dependencies for calibre-web in a virtual environment
+  become: yes
+  pip:
+    virtualenv: /opt/calibre-web/venv
+    virtualenv_command: /usr/bin/python3 -m venv
+    requirements: /opt/calibre-web/requirements.txt
+
+- name: Create the directory /var/lib/calibre-web
+  become: yes
+  file:
+    group: calibre-web
+    owner: calibre-web
+    path: /var/lib/calibre-web
+    state: directory
+
+- name: Create the directory /var/lib/calibre-web/library
+  become: yes
+  become_user: calibre-web
+  file:
+    path: /var/lib/calibre-web/library
+    state: directory
+
+- name: Set the admin's password
+  become: yes
+  become_user: calibre-web
+  command:
+    argv:
+      - ./venv/bin/python3
+      - cps.py
+      - -p
+      - /var/lib/calibre-web/app.db
+      - -s
+      - "admin:{{ admin_password }}"
+    chdir: /opt/calibre-web
+
+- name: Copy calibre-web.service into /etc/systemd/system
+  become: yes
+  copy:
+    dest: /etc/systemd/system
+    src: ../files/calibre-web.service
+
+- name: Enable calibre-web.service and restart it
+  become: yes
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    force: yes
+    name: calibre-web.service
+    state: restarted
+
+- name: Allow incoming packets on TCP port 80 (HTTP)
+  become: yes
+  iptables:
+    action: insert
+    chain: INPUT
+    destination_port: 80
+    jump: ACCEPT
+    protocol: tcp
+    rule_num: 6
+
+- name: Allow incoming packets on TCP port 8083
+  become: yes
+  iptables:
+    action: insert
+    chain: INPUT
+    destination_port: 8083
+    jump: ACCEPT
+    protocol: tcp
+    rule_num: 8
