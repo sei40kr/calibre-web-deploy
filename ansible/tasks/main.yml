@@ -16,6 +16,7 @@
   apt:
     name:
       - calibre
+      - imagemagick
       - python3-pip
       - python3-venv
     update_cache: yes
@@ -28,12 +29,27 @@
     repo: https://github.com/janeczku/calibre-web.git
     version: HEAD
 
-- name: Install dependencies for calibre-web in a virtual environment
+- name: Install dependencies for calibre-web in the virtual environment
   become: yes
   pip:
     virtualenv: /opt/calibre-web/venv
     virtualenv_command: /usr/bin/python3 -m venv
     requirements: /opt/calibre-web/requirements.txt
+
+- name: Install optional dependencies for calibre-web in the virtual environment
+  become: yes
+  pip:
+    name:
+      # metadata extraction
+      - rarfile>=3.2
+      - scholarly>=1.2.0,<1.7
+      - markdown2>=2.0.0,<2.5.0
+      - html2text>=2020.1.16,<2022.1.1
+      - python-dateutil>=2.1,<2.9.0
+      - beautifulsoup4>=4.0.1,<4.11.0
+      - cchardet>=2.0.0,<2.2.0
+    virtualenv: /opt/calibre-web/venv
+    virtualenv_command: /usr/bin/python3 -m venv
 
 - name: Create the directory /var/lib/calibre-web
   become: yes
