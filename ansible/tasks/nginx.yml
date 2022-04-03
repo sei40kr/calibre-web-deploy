@@ -1,0 +1,56 @@
+---
+- name: Add the group nginx
+  become: yes
+  group:
+    name: nginx
+
+- name: Add the user nginx
+  become: yes
+  user:
+    group: nginx
+    name: nginx
+    system: yes
+
+- name: Install nginx
+  become: yes
+  apt:
+    name:
+      - nginx
+    update_cache: yes
+
+- name: Copy nginx.conf into /etc/nginx
+  become: yes
+  copy:
+    dest: /etc/nginx
+    src: ../files/nginx/nginx.conf
+
+- name: Copy default into /etc/nginx/sites-available
+  become: yes
+  copy:
+    dest: /etc/nginx/sites-available
+    src: ../files/nginx/sites-available/default
+
+- name: Copy nginx.service into /etc/systemd/system
+  become: yes
+  copy:
+    dest: /etc/systemd/system
+    src: ../files/nginx/nginx.service
+
+- name: Enable nginx.service and restart it
+  become: yes
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    force: yes
+    name: nginx.service
+    state: restarted
+
+- name: Allow incoming packets on TCP port 80 (HTTP)
+  become: yes
+  iptables:
+    action: insert
+    chain: INPUT
+    destination_port: 80
+    jump: ACCEPT
+    protocol: tcp
+    rule_num: 5
