@@ -3,13 +3,14 @@
   become: yes
   group:
     name: calibre-web
+    gid: 2000
 
 - name: Add the user calibre-web
   become: yes
   user:
     group: calibre-web
     name: calibre-web
-    system: yes
+    uid: 2000
 
 - name: Install calibre-web dependencies
   become: yes
@@ -59,11 +60,11 @@
     path: /var/lib/calibre-web
     state: directory
 
-- name: Create the directory /var/lib/calibre-web/library
+- name: Create the directory /var/lib/calibre-web/books
   become: yes
   become_user: calibre-web
   file:
-    path: /var/lib/calibre-web/library
+    path: /var/lib/calibre-web/books
     state: directory
 
 - name: Set the admin's password
