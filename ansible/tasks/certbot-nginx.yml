@@ -79,6 +79,7 @@
 - name: Enable nginx.service and restart it
   become: yes
   systemd:
+    daemon_reload: yes
     enabled: yes
     force: yes
     name: nginx.service
