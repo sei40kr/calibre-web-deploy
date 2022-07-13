@@ -10,11 +10,16 @@
   copy:
     dest: /etc/systemd/system
     src: ../files/rclone/rclone.service
+- name: Copy rclone.timer into /etc/systemd/system
+  become: yes
+  copy:
+    dest: /etc/systemd/system
+    src: ../files/rclone/rclone.timer
 
 - name: Enable rclone.service and restart it
   become: yes
   systemd:
     enabled: yes
     force: yes
-    name: rclone.service
+    name: rclone.timer
     state: restarted
