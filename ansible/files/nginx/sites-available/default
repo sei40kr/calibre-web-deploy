@@ -28,7 +28,7 @@ server {
         ssl_certificate_key     /etc/letsencrypt/live/calibre.yong-ju.me/privkey.pem;
         ssl_trusted_certificate /etc/letsencrypt/live/calibre.yong-ju.me/chain.pem;
 
-        client_max_body_size 50m;
+        client_max_body_size 150m;
 
         location / {
             proxy_bind $server_addr;
