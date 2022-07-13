@@ -79,6 +79,7 @@
       - -s
       - "admin:{{ admin_password }}"
     chdir: /opt/calibre-web
+    creates: /var/lib/calibre-web/app.db
 
 - name: Copy calibre-web.service into /etc/systemd/system
   become: yes
