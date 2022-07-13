@@ -14,8 +14,8 @@ ExecReload=/usr/bin/kill -s HUP $MAINPID
 ExecStop=/usr/bin/kill -s QUIT $MAINPID
 Restart=always
 RestartSec=10s
-User=nginx
-Group=nginx
+User=calibre-web
+Group=calibre-web
 # Runtime directory and mode
 RuntimeDirectory=nginx
 RuntimeDirectoryMode=0750

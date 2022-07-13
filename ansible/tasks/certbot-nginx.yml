@@ -19,18 +19,6 @@
     protocol: tcp
     rule_num: 6
 
-- name: Add the group nginx
-  become: yes
-  group:
-    name: nginx
-
-- name: Add the user nginx
-  become: yes
-  user:
-    group: nginx
-    name: nginx
-    system: yes
-
 - name: Install certbot, nginx
   become: yes
   apt:
@@ -57,16 +45,16 @@
 - name: Change the ownership, group of /etc/letsencrypt/archive
   become: yes
   file:
-    owner: nginx
-    group: nginx
+    owner: calibre-web
+    group: calibre-web
     path: /etc/letsencrypt/archive
     recurse: yes
 
 - name: Change the ownership, group of /etc/letsencrypt/live
   become: yes
   file:
-    owner: nginx
-    group: nginx
+    owner: calibre-web
+    group: calibre-web
     path: /etc/letsencrypt/live
     recurse: yes
 
