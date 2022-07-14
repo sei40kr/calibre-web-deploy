@@ -28,7 +28,7 @@
     depth: 1
     dest: /opt/calibre-web
     repo: https://github.com/janeczku/calibre-web.git
-    version: HEAD
+    version: 0.6.18
 
 - name: Install dependencies for calibre-web in the virtual environment
   become: yes
