@@ -15,5 +15,5 @@ variable instance_image_id {
 
 variable instance_ssh_authorized_keys {
   type    = string
-  default = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILdPlt1yisJ1BaoaJRrhlltk/rbqYcMAY9PHJRx4jAsg sei40kr@nixos"
+  default = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItMb8y5epfGPT+9APYpeHSEhkecehg9UzllFCCVQG4P torrent"
 }
