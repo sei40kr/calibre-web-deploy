@@ -5,8 +5,8 @@ terraform {
       version = "~> 4.61.0"
     }
     oci = {
-      source  = "hashicorp/oci"
-      version = "~> 4.65.0"
+      source  = "oracle/oci"
+      version = "~> 4.118.0"
     }
   }
 }
