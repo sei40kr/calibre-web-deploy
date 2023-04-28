@@ -9,6 +9,12 @@ terraform {
       version = "~> 4.118.0"
     }
   }
+
+  backend "s3" {
+    bucket = "calibre-web-terraform-state-2"
+    region = "us-east-1"
+    key    = "terraform.tfstate"
+  }
 }
 
 provider "aws" {
