@@ -87,6 +87,17 @@
     dest: /etc/systemd/system
     src: ../files/calibre-web/calibre-web.service
 
+- name: Allow incoming packets on TCP port 443 (HTTPS)
+  become: yes
+  iptables:
+    action: insert
+    chain: INPUT
+    destination_port: 443
+    jump: ACCEPT
+    protocol: tcp
+    rule_num: 5
+
+# fails if certbot task has never been run
 - name: Enable calibre-web.service and restart it
   become: yes
   systemd:
