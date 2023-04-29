@@ -62,6 +62,10 @@ resource "oci_core_network_security_group_security_rule" "https" {
   }
 }
 
+resource "tls_private_key" "ssh" {
+  algorithm = "ED25519"
+}
+
 resource "oci_core_instance" "calibre_web" {
   agent_config {
     is_management_disabled = true
@@ -77,7 +81,7 @@ resource "oci_core_instance" "calibre_web" {
     subnet_id        = oci_core_subnet.public.id
   }
   metadata = {
-    ssh_authorized_keys = var.instance_ssh_authorized_keys
+    ssh_authorized_keys = tls_private_key.ssh.public_key_openssh
   }
   shape = "VM.Standard.A1.Flex"
   shape_config {
@@ -90,4 +94,17 @@ resource "oci_core_instance" "calibre_web" {
     source_id               = var.instance_image_id
     source_type             = "image"
   }
+}
+
+resource "local_file" "ssh_private_key" {
+  filename = "../ssh-keys/id_ed25519"
+
+  content         = tls_private_key.ssh.private_key_openssh
+  file_permission = "600"
+}
+
+resource "local_file" "ssh_public_key" {
+  filename = "../ssh-keys/id_ed25519.pub"
+
+  content = tls_private_key.ssh.public_key_openssh
 }

@@ -12,8 +12,3 @@ variable instance_image_id {
   type    = string
   default = "ocid1.image.oc1.ap-tokyo-1.aaaaaaaac2t4hu43w4fxidje6tou6wu5f5pujjvdyz2prad35hqwynh75akq"
 }
-
-variable instance_ssh_authorized_keys {
-  type    = string
-  default = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItMb8y5epfGPT+9APYpeHSEhkecehg9UzllFCCVQG4P torrent"
-}
