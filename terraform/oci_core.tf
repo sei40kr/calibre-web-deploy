@@ -31,6 +31,22 @@ resource "oci_core_network_security_group" "instance" {
   vcn_id         = oci_core_vcn.calibre_web.id
 }
 
+# Calibre-Web uses port 8083 and this can be changed only in the web interface.
+resource "oci_core_network_security_group_security_rule" "http_default" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.instance.id
+  protocol                  = "6"
+  source                    = "0.0.0.0/0"
+  source_type               = "CIDR_BLOCK"
+  stateless                 = false
+  tcp_options {
+    destination_port_range {
+      max = 8083
+      min = 8083
+    }
+  }
+}
+
 resource "oci_core_network_security_group_security_rule" "http" {
   direction                 = "INGRESS"
   network_security_group_id = oci_core_network_security_group.instance.id

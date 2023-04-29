@@ -97,6 +97,17 @@
     protocol: tcp
     rule_num: 5
 
+# Calibre-Web uses port 8083 and this can be changed only in the web interface.
+- name: Allow incoming packets on TCP port 8083
+  become: yes
+  iptables:
+    action: insert
+    chain: INPUT
+    destination_port: 8083
+    jump: ACCEPT
+    protocol: tcp
+    rule_num: 6
+
 # fails if certbot task has never been run
 - name: Enable calibre-web.service and restart it
   become: yes
