@@ -8,6 +8,7 @@
 - name: Add the user calibre-web
   become: yes
   user:
+    create_home: yes
     group: calibre-web
     name: calibre-web
     uid: 2000

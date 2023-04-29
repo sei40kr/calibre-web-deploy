@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Environment=CALIBRE_DBPATH=/var/lib/calibre-web
-ExecStart=/opt/calibre-web/venv/bin/python3 /opt/calibre-web/cps.py -c /etc/letsencrypt/live/calibre-web.yong-ju.me/fullchain.pem -k /etc/letsencrypt/live/calibre-web.yong-ju.me/privkey.pem
+ExecStart=/home/calibre-web/calibre-web/venv/bin/python3 /opt/calibre-web/cps.py -c /etc/letsencrypt/live/calibre-web.yong-ju.me/fullchain.pem -k /etc/letsencrypt/live/calibre-web.yong-ju.me/privkey.pem
 Restart=on-failure
 User=calibre-web
 Group=calibre-web

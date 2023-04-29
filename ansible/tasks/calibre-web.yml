@@ -13,16 +13,16 @@
   become: yes
   git:
     depth: 1
-    dest: /opt/calibre-web
+    dest: /home/calibre-web/calibre-web
     repo: https://github.com/janeczku/calibre-web.git
     version: 0.6.18
 
 - name: Install dependencies for calibre-web in the virtual environment
   become: yes
   pip:
-    virtualenv: /opt/calibre-web/venv
+    virtualenv: /home/calibre-web/calibre-web/venv
     virtualenv_command: /usr/bin/python3 -m venv
-    requirements: /opt/calibre-web/requirements.txt
+    requirements: /home/calibre-web/calibre-web/requirements.txt
 
 - name: Install optional dependencies for calibre-web in the virtual environment
   become: yes
@@ -36,7 +36,7 @@
       - python-dateutil>=2.1,<2.9.0
       - beautifulsoup4>=4.0.1,<4.11.0
       - cchardet>=2.0.0,<2.2.0
-    virtualenv: /opt/calibre-web/venv
+    virtualenv: /home/calibre-web/calibre-web/venv
     virtualenv_command: /usr/bin/python3 -m venv
 
 - name: Create the directory /var/lib/calibre-web
@@ -66,7 +66,7 @@
       - /var/lib/calibre-web/app.db
       - -s
       - "admin:{{ admin_password }}"
-    chdir: /opt/calibre-web
+    chdir: /home/calibre-web/calibre-web
     creates: /var/lib/calibre-web/app.db
 
 - name: Copy calibre-web.service into /etc/systemd/system
