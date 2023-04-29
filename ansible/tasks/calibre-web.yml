@@ -1,17 +1,4 @@
 ---
-- name: Add the group calibre-web
-  become: yes
-  group:
-    name: calibre-web
-    gid: 2000
-
-- name: Add the user calibre-web
-  become: yes
-  user:
-    group: calibre-web
-    name: calibre-web
-    uid: 2000
-
 - name: Install calibre-web dependencies
   become: yes
   apt:
@@ -60,19 +47,13 @@
     path: /var/lib/calibre-web
     state: directory
 
-- name: Create the directory /var/lib/calibre-web/books
-  become: yes
-  become_user: calibre-web
-  file:
-    path: /var/lib/calibre-web/books
-    state: directory
-
-- name: Copy empty Calibre database into /var/lib/calibre-web/books
+- name: Copy empty Calibre database into /mnt/books
   become: yes
   become_user: calibre-web
   copy:
-    dest: /var/lib/calibre-web/books
+    dest: /mnt/books
     src: ../files/calibre-web/metadata.db
+    force: false
 
 - name: Set the admin's password
   become: yes

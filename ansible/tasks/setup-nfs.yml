@@ -1,0 +1,23 @@
+---
+- name: Install NFS client
+  become: yes
+  apt:
+    name: nfs-common
+    update_cache: yes
+
+- name: Create the directory /mnt/books
+  become: yes
+  file:
+    group: calibre-web
+    owner: calibre-web
+    path: /mnt/books
+    state: directory
+
+- name: Mount the NFS share 10.0.1.101:/calibre-web-books
+  become: yes
+  mount:
+    fstype: nfs
+    opts: rw,async,noatime,noexec
+    path: /mnt/books
+    src: 10.0.1.101:/calibre-web-books
+    state: mounted

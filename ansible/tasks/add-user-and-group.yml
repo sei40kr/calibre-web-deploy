@@ -1,0 +1,14 @@
+---
+- name: Add the group calibre-web
+  become: yes
+  group:
+    name: calibre-web
+    gid: 2000
+
+- name: Add the user calibre-web
+  become: yes
+  user:
+    group: calibre-web
+    name: calibre-web
+    uid: 2000
+
