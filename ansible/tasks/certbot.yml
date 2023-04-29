@@ -30,7 +30,7 @@
       - certonly
       - -n
       - -d
-      - calibre.yong-ju.me
+      - calibre-web.yong-ju.me
       - --keep
       - --standalone
       - --agree-tos
