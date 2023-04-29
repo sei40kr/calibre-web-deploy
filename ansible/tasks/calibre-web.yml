@@ -67,6 +67,13 @@
     path: /var/lib/calibre-web/books
     state: directory
 
+- name: Copy empty Calibre database into /var/lib/calibre-web/books
+  become: yes
+  become_user: calibre-web
+  copy:
+    dest: /var/lib/calibre-web/books
+    src: ../files/calibre-web/metadata.db
+
 - name: Set the admin's password
   become: yes
   become_user: calibre-web
