@@ -12,3 +12,9 @@ variable instance_image_id {
   type    = string
   default = "ocid1.image.oc1.ap-tokyo-1.aaaaaaaac2t4hu43w4fxidje6tou6wu5f5pujjvdyz2prad35hqwynh75akq"
 }
+
+variable "budget_amount" {
+  type        = string
+  default     = "1000"
+  description = "Budget amount for Calibre-Web."
+}
