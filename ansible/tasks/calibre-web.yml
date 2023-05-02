@@ -7,15 +7,26 @@
       - imagemagick
       - python3-pip
       - python3-venv
+      - sqlite3
     update_cache: yes
 
 - name: Checkout calibre-web repo
   become: yes
+  become_user: calibre-web
   git:
     depth: 1
     dest: /home/calibre-web/calibre-web
+    force: yes
     repo: https://github.com/janeczku/calibre-web.git
     version: 0.6.20
+
+- name: Apply patch to calibre-web
+  become: yes
+  become_user: calibre-web
+  patch:
+    basedir: /home/calibre-web/calibre-web
+    src: ../files/calibre-web/db-migrations.patch
+    strip: 1
 
 # calibre-web requires werkzeug<2.2.0 but Flask requires werkzeug>=2.2 and this
 # causes a dependency conflict.
@@ -31,6 +42,7 @@
 
 - name: Install dependencies for calibre-web in the virtual environment
   become: yes
+  become_user: calibre-web
   pip:
     virtualenv: /home/calibre-web/calibre-web/venv
     virtualenv_command: /usr/bin/python3 -m venv
@@ -38,6 +50,7 @@
 
 - name: Install optional dependencies for calibre-web in the virtual environment
   become: yes
+  become_user: calibre-web
   pip:
     name:
       # metadata extraction
@@ -67,6 +80,15 @@
     src: ../files/calibre-web/metadata.db
     force: false
 
+- name: Create the Calibre-Web settings file
+  become: yes
+  become_user: calibre-web
+  shell: |
+    __RUN_MIGRATIONS_AND_EXIT=1 ./venv/bin/python3 cps.py -p /var/lib/calibre-web/app.db
+  args:
+    chdir: /home/calibre-web/calibre-web
+    creates: /var/lib/calibre-web/app.db
+
 - name: Set the admin's password
   become: yes
   become_user: calibre-web
@@ -79,7 +101,18 @@
       - -s
       - "admin:{{ admin_password }}"
     chdir: /home/calibre-web/calibre-web
-    creates: /var/lib/calibre-web/app.db
+
+- name: Set the port to 443 and enable uploading
+  become: yes
+  become_user: calibre-web
+  command:
+    argv:
+      - sqlite3
+      - /var/lib/calibre-web/app.db
+      - |
+        UPDATE settings SET config_calibre_dir = '/mnt/books',
+                            config_port        = 443,
+                            config_uploading   = 1
 
 - name: Copy calibre-web.service into /etc/systemd/system
   become: yes
