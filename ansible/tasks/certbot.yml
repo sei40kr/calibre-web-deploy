@@ -15,13 +15,6 @@
     protocol: tcp
     rule_num: 7
 
-- name: Stop calibre-web.service while obtaining or renewing a certificate
-  become: yes
-  systemd:
-    daemon_reload: yes
-    name: calibre-web.service
-    state: stopped
-
 - name: Obtain or renew a certificate
   become: yes
   command:

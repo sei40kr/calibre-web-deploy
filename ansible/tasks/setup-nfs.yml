@@ -2,8 +2,19 @@
 - name: Install NFS client
   become: yes
   apt:
-    name: nfs-common
+    name:
+      - nfs-common
+      # Needed for the NFS client-side caching daemon
+      - cachefilesd
     update_cache: yes
+
+- name: Enable the NFS client-side caching daemon
+  become: yes
+  lineinfile:
+    line: "RUN=yes"
+    path: /etc/default/cachefilesd
+    regexp: "^#?RUN="
+    state: present
 
 - name: Create the directory /mnt/books
   become: yes
@@ -17,7 +28,7 @@
   become: yes
   mount:
     fstype: nfs
-    opts: rw,async,noatime,noexec
+    opts: rw,async,noatime,noexec,fsc
     path: /mnt/books
     src: 10.0.1.101:/calibre-web-books
     state: mounted
