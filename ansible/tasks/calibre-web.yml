@@ -15,7 +15,19 @@
     depth: 1
     dest: /home/calibre-web/calibre-web
     repo: https://github.com/janeczku/calibre-web.git
-    version: 0.6.18
+    version: 0.6.20
+
+# calibre-web requires werkzeug<2.2.0 but Flask requires werkzeug>=2.2 and this
+# causes a dependency conflict.
+# See janeczku/calibre-web#2730 for details.
+- name: Fix dependency conflict between Flask and werkzeug
+  become: yes
+  become_user: calibre-web
+  lineinfile:
+    line: "Flask>=1.0.2,<2.2.0"
+    path: /home/calibre-web/calibre-web/requirements.txt
+    regexp: "^Flask>=1.0.2,<2.3.0$"
+    state: present
 
 - name: Install dependencies for calibre-web in the virtual environment
   become: yes
@@ -30,12 +42,12 @@
     name:
       # metadata extraction
       - rarfile>=3.2
-      - scholarly>=1.2.0,<1.7
+      - scholarly>=1.2.0,<1.8
       - markdown2>=2.0.0,<2.5.0
       - html2text>=2020.1.16,<2022.1.1
       - python-dateutil>=2.1,<2.9.0
-      - beautifulsoup4>=4.0.1,<4.11.0
-      - cchardet>=2.0.0,<2.2.0
+      - beautifulsoup4>=4.0.1,<4.12.0
+      - faust-cchardet>=2.1.18
     virtualenv: /home/calibre-web/calibre-web/venv
     virtualenv_command: /usr/bin/python3 -m venv
 
