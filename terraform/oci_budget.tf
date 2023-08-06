@@ -1,6 +1,6 @@
 resource "oci_budget_budget" "calibre_web" {
   amount         = var.budget_amount
-  compartment_id = var.root_compartment_id
+  compartment_id = oci_identity_compartment.calibre_web.compartment_id
   reset_period   = "MONTHLY"
 
   description  = "Budget for Calibre-Web"
